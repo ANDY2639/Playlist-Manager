@@ -24,7 +24,11 @@
       "Bash(pnpm run build:backend:*)",
       "Bash(pnpm --filter backend add:*)",
       "Bash(pnpm install:*)",
-      "Bash(pnpm run build:frontend:*)"
+      "Bash(pnpm run build:frontend:*)",
+      "Bash(pnpm run build)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
     ],
     "deny": [],
     "ask": []
