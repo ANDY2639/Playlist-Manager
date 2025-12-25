@@ -7,6 +7,8 @@ import { YtDlp } from 'ytdlp-nodejs';
 import path from 'path';
 import { promises as fs, accessSync, constants } from 'fs';
 import { execSync } from 'child_process';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import {
   VideoDownloadResult,
   DownloadConfig,
@@ -14,6 +16,10 @@ import {
 } from '../types/download.types.js';
 import { createError } from '../utils/error-handler.js';
 import { getFileSize } from '../utils/file-system.utils.js';
+
+// ES module equivalent of __dirname
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /**
  * Default download configuration
