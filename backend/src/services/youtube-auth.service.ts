@@ -2,9 +2,9 @@ import { google } from 'googleapis';
 import type { OAuth2Client } from 'google-auth-library';
 import { promises as fs } from 'fs';
 import path from 'path';
-import { StoredTokens, OAuth2Config } from '../types/auth.types';
+import { StoredTokens, OAuth2Config } from '../types/auth.types.js';
 import { config } from 'dotenv';
-import { pathExists } from '../utils/file-system.utils';
+import { pathExists } from '../utils/file-system.utils.js';
 
 config();
 

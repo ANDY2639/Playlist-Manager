@@ -5,12 +5,12 @@
 
 import * as v from 'valibot';
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { authMiddleware, getOAuth2ClientFromRequest } from '../middlewares/auth.middleware';
-import { getDownloadManagerService } from '../services/download-manager.service';
-import { StartDownloadSchema, DownloadIdSchema, ZipDownloadParamsSchema } from '../schemas/download.schema';
-import { AppError, formatErrorResponse } from '../utils/error-handler';
-import { zipService } from '../services/zip.service';
-import { cleanupDownloadDirectory } from '../utils/file-system.utils';
+import { authMiddleware, getOAuth2ClientFromRequest } from '../middlewares/auth.middleware.js';
+import { getDownloadManagerService } from '../services/download-manager.service.js';
+import { StartDownloadSchema, DownloadIdSchema, ZipDownloadParamsSchema } from '../schemas/download.schema.js';
+import { AppError, formatErrorResponse } from '../utils/error-handler.js';
+import { zipService } from '../services/zip.service.js';
+import { cleanupDownloadDirectory } from '../utils/file-system.utils.js';
 
 /**
  * Register download routes

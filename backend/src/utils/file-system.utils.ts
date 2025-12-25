@@ -5,7 +5,7 @@
 import { promises as fs } from 'fs';
 import path from 'path';
 import dayjs from 'dayjs';
-import { createError } from './error-handler';
+import { createError } from './error-handler.js';
 
 /**
  * Check if a file or directory exists

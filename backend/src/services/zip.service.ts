@@ -2,8 +2,8 @@ import archiver, { Archiver } from 'archiver';
 import { promises as fs } from 'fs';
 import * as path from 'path';
 import dayjs from 'dayjs';
-import { AppError } from '../utils/error-handler';
-import { pathExists } from '../utils/file-system.utils';
+import { AppError } from '../utils/error-handler.js';
+import { pathExists } from '../utils/file-system.utils.js';
 
 /**
  * Service for generating ZIP archives from downloaded videos

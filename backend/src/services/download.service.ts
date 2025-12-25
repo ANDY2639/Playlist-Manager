@@ -10,9 +10,9 @@ import {
   VideoDownloadResult,
   DownloadConfig,
   VideoDownloadInfo,
-} from '../types/download.types';
-import { createError } from '../utils/error-handler';
-import { getFileSize } from '../utils/file-system.utils';
+} from '../types/download.types.js';
+import { createError } from '../utils/error-handler.js';
+import { getFileSize } from '../utils/file-system.utils.js';
 
 /**
  * Default download configuration

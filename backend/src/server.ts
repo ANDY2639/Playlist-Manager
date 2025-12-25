@@ -4,7 +4,7 @@ import helmet from '@fastify/helmet';
 import rateLimit from '@fastify/rate-limit';
 import { config } from 'dotenv';
 import * as v from 'valibot';
-import { AppError, formatErrorResponse } from './utils/error-handler';
+import { AppError, formatErrorResponse } from './utils/error-handler.js';
 
 // Load environment variables
 config();
@@ -53,9 +53,9 @@ fastify.get('/health', async () => {
 });
 
 // Import routes
-import { authRoutes } from './routes/auth.routes';
-import { playlistRoutes } from './routes/playlist.routes';
-import { downloadRoutes } from './routes/download.routes';
+import { authRoutes } from './routes/auth.routes.js';
+import { playlistRoutes } from './routes/playlist.routes.js';
+import { downloadRoutes } from './routes/download.routes.js';
 
 // Register routes
 await fastify.register(authRoutes, { prefix: '/api/auth' });

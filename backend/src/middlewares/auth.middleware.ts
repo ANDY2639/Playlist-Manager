@@ -1,7 +1,7 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import type { OAuth2Client } from 'google-auth-library';
-import { getYouTubeAuthService } from '../services/youtube-auth.service';
-import { StoredTokens } from '../types/auth.types';
+import { getYouTubeAuthService } from '../services/youtube-auth.service.js';
+import { StoredTokens } from '../types/auth.types.js';
 
 /**
  * Authentication middleware

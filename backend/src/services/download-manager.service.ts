@@ -5,16 +5,16 @@
 
 import { randomUUID } from 'crypto';
 import type { OAuth2Client } from 'google-auth-library';
-import { DownloadStatus, VideoDownloadResult } from '../types/download.types';
-import { YouTubeAPIService } from './youtube-api.service';
-import { DownloadService } from './download.service';
+import { DownloadStatus, VideoDownloadResult } from '../types/download.types.js';
+import { YouTubeAPIService } from './youtube-api.service.js';
+import { DownloadService } from './download.service.js';
 import {
   generatePlaylistDownloadPath,
   ensureDownloadDirectory,
   cleanupDownloadDirectory,
   isDirectoryEmpty,
-} from '../utils/file-system.utils';
-import { createError } from '../utils/error-handler';
+} from '../utils/file-system.utils.js';
+import { createError } from '../utils/error-handler.js';
 
 /**
  * Download Manager - Singleton service for orchestrating playlist downloads
