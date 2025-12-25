@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+/* Design System CSS Variables (Minimalist Light Theme) */
+@layer base {
+  :root {
+    /* Background and foreground */
+    --background: 0 0% 100%;        /* Pure white */
+    --foreground: 0 0% 9%;           /* Almost black */
+
+    /* Card */
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 9%;
+
+    /* Muted (subtle backgrounds) */
+    --muted: 0 0% 96%;               /* Light gray */
+    --muted-foreground: 0 0% 40%;    /* Medium gray text */
+
+    /* Primary (YouTube red inspired, subtle) */
+    --primary: 0 79% 63%;            /* #FF5757 */
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary (neutral) */
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 9%;
+
+    /* Accent (for hover states) */
+    --accent: 0 0% 96%;
+    --accent-foreground: 0 0% 9%;
+
+    /* Destructive (errors, delete actions) */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    /* Border and input */
+    --border: 0 0% 90%;              /* Light border */
+    --input: 0 0% 90%;
+    --ring: 0 79% 63%;               /* Focus ring matches primary */
+
+    /* Border radius (minimalist = subtle curves) */
+    --radius: 0.5rem;
+  }
+}
+
+/* Base styles */
+@layer base {
+  * {
+    border-color: hsl(var(--border));
+  }
+
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Remove default focus ring, use our custom one */
+  *:focus {
+    outline: none;
+  }
+
+  *:focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+}
+
+/* Utility layer for custom utilities */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

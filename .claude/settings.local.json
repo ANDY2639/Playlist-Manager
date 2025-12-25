@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "WebFetch(domain:github.com)",
+      "Bash(tree:*)",
+      "Bash(npm install:*)",
+      "Bash(dir:*)",
+      "Bash(npm view:*)",
+      "Bash(npm run dev)",
+      "Bash(rm:*)",
+      "Bash(curl:*)",
+      "Bash(if [ ! -f \"backend/.env\" ])",
+      "Bash(then cp backend/.env.example backend/.env)",
+      "Bash(else echo \".env file already exists\")",
+      "Bash(fi)",
+      "Bash(npm run build:*)",
+      "Bash(if [ ! -f \".env\" ])",
+      "Bash(then cp .env.example .env)",
+      "Bash(find:*)",
+      "Bash(npx shadcn@latest add:*)",
+      "Bash(npx tsc:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
