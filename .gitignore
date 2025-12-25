@@ -51,6 +51,7 @@ logs/
 # Downloads and temp files
 downloads/
 backend/tokens/
+backend/bin/
 *.tmp
 *.temp
 

@@ -58,20 +58,25 @@ export class DownloadService {
    * Find yt-dlp binary in common installation locations
    */
   private findYtDlpBinary(): string | undefined {
+    // Get the project root directory (go up from services directory)
+    const projectRoot = path.resolve(__dirname, '../..');
+    const projectBinPath = path.join(projectRoot, 'bin', 'yt-dlp');
+
     // Try to find via 'which' command first
     try {
       const result = execSync('which yt-dlp 2>/dev/null', { encoding: 'utf8' }).trim();
       if (result) {
-        console.log(`Found yt-dlp via 'which': ${result}`);
+        console.log(`✓ Found yt-dlp via 'which': ${result}`);
         return result;
       }
     } catch {
       // 'which' command failed, continue to check paths
     }
 
-    // Common installation paths (check Render production path first)
+    // Common installation paths (check project bin first for Render compatibility)
     const possiblePaths = [
-      '/opt/render/.local/bin/yt-dlp',           // Render production
+      projectBinPath,                            // Project bin directory (for Render)
+      '/opt/render/.local/bin/yt-dlp',           // Render system path (legacy)
       `${process.env.HOME}/.local/bin/yt-dlp`,  // Local development
       '/usr/local/bin/yt-dlp',                   // Standard Linux location
       '/usr/bin/yt-dlp',                         // Alternative Linux location
