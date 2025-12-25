@@ -5,8 +5,8 @@
 
 import * as v from 'valibot';
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { authMiddleware, getOAuth2ClientFromRequest } from '../middlewares/auth.middleware.ts';
-import { YouTubeAPIService } from '../services/youtube-api.service.ts';
+import { authMiddleware, getOAuth2ClientFromRequest } from '../middlewares/auth.middleware';
+import { YouTubeAPIService } from '../services/youtube-api.service';
 import {
   CreatePlaylistSchema,
   UpdatePlaylistSchema,
@@ -14,8 +14,8 @@ import {
   ReorderItemSchema,
   PlaylistIdSchema,
   PlaylistItemIdSchema,
-} from '../schemas/playlist.schema.ts';
-import { AppError, formatErrorResponse } from '../utils/error-handler.ts';
+} from '../schemas/playlist.schema';
+import { AppError, formatErrorResponse } from '../utils/error-handler';
 
 /**
  * Register playlist routes

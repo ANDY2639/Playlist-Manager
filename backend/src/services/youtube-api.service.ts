@@ -12,8 +12,8 @@ import {
   PlaylistDTO,
   PlaylistItemDTO,
   PrivacyStatus,
-} from '../types/playlist.types.ts';
-import { handleYouTubeAPIError, createError } from '../utils/error-handler.ts';
+} from '../types/playlist.types';
+import { handleYouTubeAPIError, createError } from '../utils/error-handler';
 
 export class YouTubeAPIService {
   private youtube: youtube_v3.Youtube;

@@ -1,6 +1,6 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
-import { getYouTubeAuthService } from '../services/youtube-auth.service.ts';
-import { AuthStatus } from '../types/auth.types.ts';
+import { getYouTubeAuthService } from '../services/youtube-auth.service';
+import { AuthStatus } from '../types/auth.types';
 
 /**
  * Authentication routes for OAuth2 flow with YouTube

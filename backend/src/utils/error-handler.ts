@@ -2,7 +2,7 @@
  * Error handling utilities for the application
  */
 
-import { YouTubeAPIError as YouTubeAPIErrorType } from '../types/playlist.types.ts';
+import { YouTubeAPIError as YouTubeAPIErrorType } from '../types/playlist.types';
 
 /**
  * Base application error class
