@@ -69,21 +69,21 @@ export class DownloadService {
       // 'which' command failed, continue to check paths
     }
 
-    // Common installation paths
+    // Common installation paths (check Render production path first)
     const possiblePaths = [
-      '/usr/local/bin/yt-dlp',
-      '/usr/bin/yt-dlp',
-      `${process.env.HOME}/.local/bin/yt-dlp`,
-      '/opt/render/.local/bin/yt-dlp',
+      '/opt/render/.local/bin/yt-dlp',           // Render production
+      `${process.env.HOME}/.local/bin/yt-dlp`,  // Local development
+      '/usr/local/bin/yt-dlp',                   // Standard Linux location
+      '/usr/bin/yt-dlp',                         // Alternative Linux location
     ];
 
     for (const binaryPath of possiblePaths) {
       try {
         accessSync(binaryPath, constants.X_OK);
-        console.log(`Found yt-dlp at: ${binaryPath}`);
+        console.log(`✓ Found yt-dlp at: ${binaryPath}`);
         return binaryPath;
       } catch {
-        // Path doesn't exist or isn't executable
+        console.log(`✗ Not found: ${binaryPath}`);
       }
     }
 
