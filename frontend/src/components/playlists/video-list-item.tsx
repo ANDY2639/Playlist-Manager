@@ -1,6 +1,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
+import Image from 'next/image';
 import { Trash2 } from 'lucide-react';
 import type { PlaylistItemDTO } from '@/types/playlist.types';
 
@@ -17,10 +18,12 @@ export function VideoListItem({ video, onRemove, isRemoving = false, openModal }
       {/* Thumbnail */}
       <div className="shrink-0">
         {video.thumbnailUrl ? (
-          <img
+          <Image
             src={video.thumbnailUrl}
             alt={video.title || 'Video thumbnail'}
             className="w-40 h-24 object-cover rounded-md"
+            width={160}
+            height={96}
           />
         ) : (
           <div className="w-40 h-24 bg-muted rounded-md flex items-center justify-center">

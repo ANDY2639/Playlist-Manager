@@ -4,7 +4,7 @@
  */
 
 import { randomUUID } from 'crypto';
-import { OAuth2Client } from 'google-auth-library';
+import type { OAuth2Client } from 'google-auth-library';
 import { DownloadStatus, VideoDownloadResult } from '../types/download.types.ts';
 import { YouTubeAPIService } from './youtube-api.service.ts';
 import { DownloadService } from './download.service.ts';

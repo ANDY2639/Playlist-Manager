@@ -1,5 +1,5 @@
 import { google } from 'googleapis';
-import { OAuth2Client } from "google-auth-library";
+import type { OAuth2Client } from 'google-auth-library';
 import { promises as fs } from 'fs';
 import path from 'path';
 import { StoredTokens, OAuth2Config } from '../types/auth.types.ts';

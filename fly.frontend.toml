@@ -1,0 +1,37 @@
+app = "playlist-manager-frontend"
+primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile.frontend"
+  [build.args]
+    NEXT_PUBLIC_API_URL = "https://playlist-manager-backend.fly.dev"
+
+[env]
+  NODE_ENV = "production"
+  PORT = "3000"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+
+[[services]]
+  http_checks = []
+  internal_port = 3000
+  protocol = "tcp"
+
+  [[services.ports]]
+    force_https = true
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 512

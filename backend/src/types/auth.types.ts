@@ -1,4 +1,4 @@
-import { OAuth2Client } from 'googleapis-common';
+import type { OAuth2Client } from 'google-auth-library';
 
 /**
  * OAuth2 tokens stored in the file system

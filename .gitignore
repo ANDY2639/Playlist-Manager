@@ -6,6 +6,10 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Lock files (keep pnpm-lock.yaml only)
+package-lock.json
+yarn.lock
+
 # Environment variables
 .env
 .env.local

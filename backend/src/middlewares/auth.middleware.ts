@@ -1,5 +1,5 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { OAuth2Client } from 'google-auth-library';
+import type { OAuth2Client } from 'google-auth-library';
 import { getYouTubeAuthService } from '../services/youtube-auth.service.ts';
 import { StoredTokens } from '../types/auth.types.ts';
 

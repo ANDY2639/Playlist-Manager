@@ -20,7 +20,11 @@
       "Bash(then cp .env.example .env)",
       "Bash(find:*)",
       "Bash(npx shadcn@latest add:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(pnpm run build:backend:*)",
+      "Bash(pnpm --filter backend add:*)",
+      "Bash(pnpm install:*)",
+      "Bash(pnpm run build:frontend:*)"
     ],
     "deny": [],
     "ask": []

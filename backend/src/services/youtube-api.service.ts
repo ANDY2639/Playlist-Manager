@@ -4,7 +4,7 @@
  */
 
 import { google, youtube_v3 } from 'googleapis';
-import { OAuth2Client } from 'google-auth-library';
+import type { OAuth2Client } from 'google-auth-library';
 import {
   YouTubePlaylist,
   YouTubePlaylistItem,

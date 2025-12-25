@@ -1,0 +1,13 @@
+[build]
+builder = "nixpacks"
+buildCommand = "pnpm install && pnpm run build:backend"
+
+[deploy]
+startCommand = "pnpm --filter backend start"
+healthcheckPath = "/health"
+healthcheckTimeout = 100
+restartPolicyType = "on-failure"
+restartPolicyMaxRetries = 10
+
+[env]
+NIXPACKS_INSTALL_CMD = "pnpm install"

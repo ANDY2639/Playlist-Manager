@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "buildCommand": "cd frontend && pnpm install && pnpm run build",
+  "outputDirectory": "frontend/.next",
+  "installCommand": "cd frontend && pnpm install",
+  "framework": "nextjs",
+  "regions": ["iad1"],
+  "build": {
+    "env": {
+      "PNPM_FLAGS": "--shamefully-hoist"
+    }
+  }
+}
