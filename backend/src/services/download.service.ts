@@ -5,7 +5,8 @@
 
 import { YtDlp } from 'ytdlp-nodejs';
 import path from 'path';
-import { promises as fs } from 'fs';
+import { promises as fs, accessSync, constants } from 'fs';
+import { execSync } from 'child_process';
 import {
   VideoDownloadResult,
   DownloadConfig,
@@ -34,9 +35,60 @@ export class DownloadService {
   constructor(config: Partial<DownloadConfig> = {}) {
     this.config = { ...DEFAULT_CONFIG, ...config };
 
-    // Initialize yt-dlp wrapper
-    // Note: yt-dlp binary should be installed globally or specified via path
-    this.ytDlp = new YtDlp();
+    // Find yt-dlp binary
+    const binaryPath = this.findYtDlpBinary();
+
+    // Initialize yt-dlp wrapper with found binary path
+    try {
+      this.ytDlp = binaryPath
+        ? new YtDlp({ binaryPath })
+        : new YtDlp();
+
+      console.log(`yt-dlp initialized${binaryPath ? ` with binary at: ${binaryPath}` : ''}`);
+    } catch (error) {
+      console.error('Failed to initialize yt-dlp:', error);
+      throw createError.downloadFailed(
+        'Failed to initialize yt-dlp. Please ensure yt-dlp is installed.',
+        { originalError: error }
+      );
+    }
+  }
+
+  /**
+   * Find yt-dlp binary in common installation locations
+   */
+  private findYtDlpBinary(): string | undefined {
+    // Try to find via 'which' command first
+    try {
+      const result = execSync('which yt-dlp 2>/dev/null', { encoding: 'utf8' }).trim();
+      if (result) {
+        console.log(`Found yt-dlp via 'which': ${result}`);
+        return result;
+      }
+    } catch {
+      // 'which' command failed, continue to check paths
+    }
+
+    // Common installation paths
+    const possiblePaths = [
+      '/usr/local/bin/yt-dlp',
+      '/usr/bin/yt-dlp',
+      `${process.env.HOME}/.local/bin/yt-dlp`,
+      '/opt/render/.local/bin/yt-dlp',
+    ];
+
+    for (const binaryPath of possiblePaths) {
+      try {
+        accessSync(binaryPath, constants.X_OK);
+        console.log(`Found yt-dlp at: ${binaryPath}`);
+        return binaryPath;
+      } catch {
+        // Path doesn't exist or isn't executable
+      }
+    }
+
+    console.warn('yt-dlp binary not found in common locations, using default behavior');
+    return undefined;
   }
 
   /**
