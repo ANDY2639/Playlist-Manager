@@ -56,17 +56,17 @@ function PlaylistsContent() {
   }
 
   return (
-    <main className="min-h-[calc(100vh-4rem)] py-8">
+    <main className="min-h-[calc(100vh-5rem)] py-12">
       <Container size="xl">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Your Playlists</h1>
-            <p className="text-muted-foreground mt-2">
-              Manage and download your YouTube playlists
+        {/* Header with entrance animation */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6 mb-12 animate-fade-in-up">
+          <div className="space-y-3">
+            <h1 className="text-4xl font-bold tracking-tight">Your Playlists</h1>
+            <p className="text-muted-foreground text-base">
+              Manage and download your YouTube playlists with ease
             </p>
           </div>
-          <Button onClick={() => setCreateModalOpen(true)} className="gap-2">
+          <Button onClick={() => setCreateModalOpen(true)} size="lg" className="gap-2">
             <Plus className="h-4 w-4" />
             Create Playlist
           </Button>
@@ -74,28 +74,34 @@ function PlaylistsContent() {
 
         {/* Empty State */}
         {playlists.length === 0 ? (
-          <EmptyState
-            icon={ListVideo}
-            title="No playlists yet"
-            description="Create your first playlist to get started with managing your YouTube content."
-            action={
-              <Button onClick={() => setCreateModalOpen(true)} className="gap-2">
-                <Plus className="h-4 w-4" />
-                Create Your First Playlist
-              </Button>
-            }
-          />
+          <div className="animate-fade-in-up stagger-1">
+            <EmptyState
+              icon={ListVideo}
+              title="No playlists yet"
+              description="Create your first playlist to get started with managing your YouTube content."
+              action={
+                <Button onClick={() => setCreateModalOpen(true)} size="lg" className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  Create Your First Playlist
+                </Button>
+              }
+            />
+          </div>
         ) : (
-          /* Playlists Grid */
+          /* Playlists Grid with staggered animations */
           <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {playlists.map((playlist) => (
-              <PlaylistCard
+            {playlists.map((playlist, index) => (
+              <div
                 key={playlist.id}
-                playlist={playlist}
-                onEdit={() => setEditingPlaylist(playlist)}
-                onDelete={() => setDeletingPlaylist(playlist)}
-                onDownload={() => console.log('Download:', playlist.id)}
-              />
+                className={`animate-fade-in-up stagger-${Math.min(index + 1, 6)}`}
+              >
+                <PlaylistCard
+                  playlist={playlist}
+                  onEdit={() => setEditingPlaylist(playlist)}
+                  onDelete={() => setDeletingPlaylist(playlist)}
+                  onDownload={() => console.log('Download:', playlist.id)}
+                />
+              </div>
             ))}
           </div>
         )}
