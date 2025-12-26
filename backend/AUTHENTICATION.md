@@ -13,6 +13,7 @@ npm run auth:setup
 ```
 
 This will:
+
 1. Check if already authenticated (skip if valid)
 2. Open browser for Google OAuth
 3. Save tokens to `backend/tokens/youtube-tokens.json`
@@ -51,6 +52,7 @@ https://your-render-app.onrender.com/api/auth/setup/start?secret=your_generated_
 ```
 
 This will:
+
 1. Validate your secret token
 2. Redirect you to Google OAuth
 3. After authorization, redirect back to `/api/auth/google/callback`
@@ -66,6 +68,7 @@ https://your-render-app.onrender.com/api/auth/status
 ```
 
 Response when authenticated:
+
 ```json
 {
   "authenticated": true,
@@ -78,6 +81,7 @@ Response when authenticated:
 ```
 
 Response when NOT authenticated:
+
 ```json
 {
   "authenticated": false,
@@ -102,11 +106,13 @@ Response when NOT authenticated:
 Make sure your Google Cloud Console has the correct callback URL:
 
 **Local Development:**
+
 ```
 http://localhost:3001/api/auth/google/callback
 ```
 
 **Production (Render):**
+
 ```
 https://your-app.onrender.com/api/auth/google/callback
 ```
@@ -169,6 +175,7 @@ YOUTUBE_ACCOUNT_EMAIL=your-expected-email@gmail.com
 If tokens expire or become invalid:
 
 1. Visit the same setup URL again:
+
    ```
    https://your-app.onrender.com/api/auth/setup/start?secret=YOUR_SECRET
    ```
@@ -206,20 +213,25 @@ If tokens expire or become invalid:
 ## 📚 API Endpoints
 
 ### `GET /api/auth/status`
+
 Check authentication status (public, no auth required)
 
 ### `GET /api/auth/setup/start?secret=YOUR_SECRET`
+
 Initiate OAuth flow for remote authentication (protected by secret)
 
 ### `GET /api/auth/google/callback`
+
 OAuth callback endpoint (called by Google after authorization)
 
 ### `POST /api/auth/refresh` (development only)
+
 Manually refresh tokens
 
 ## 🔄 Token Auto-Refresh
 
 Once authenticated, the server automatically:
+
 - Refreshes access tokens every 50 minutes
 - Uses refresh_token to get new access_token
 - Logs refresh success/failure
