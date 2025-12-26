@@ -2,13 +2,20 @@ import { google } from 'googleapis';
 import type { OAuth2Client } from 'google-auth-library';
 import { promises as fs } from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 import { StoredTokens, OAuth2Config } from '../types/auth.types.js';
 import { config } from 'dotenv';
 import { pathExists } from '../utils/file-system.utils.js';
 
 config();
 
-const TOKENS_DIR = path.join(process.cwd(), 'tokens');
+// Get __dirname equivalent in ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+// Use path relative to this service file (backend/src/services/../../tokens = backend/tokens)
+const TOKENS_DIR = path.join(__dirname, '..', '..', 'tokens');
 const TOKENS_FILE = path.join(TOKENS_DIR, 'youtube-tokens.json');
 const GOOGLEAPIS_URL = process.env.GOOGLEAPIS_URL!
 
@@ -256,6 +263,67 @@ export class YouTubeAuthService {
    */
   async getStoredTokens(): Promise<StoredTokens | null> {
     return this.loadTokens();
+  }
+
+  /**
+   * Ensure backend is authenticated with YouTube
+   * Called once at server startup
+   * Verifies tokens exist and are valid
+   */
+  async ensureAuthenticated(): Promise<void> {
+    const tokens = await this.loadTokens();
+
+    if (!tokens) {
+      throw new Error(
+        '\n❌ No YouTube tokens found.\n' +
+        '→ Run: npm run auth:setup\n' +
+        '→ This will authenticate the admin account.\n'
+      );
+    }
+
+    // Verify tokens are valid
+    try {
+      await this.getAuthenticatedClient();
+      const userInfo = await this.getUserInfo();
+
+      console.log(`✓ Authenticated as: ${userInfo.email}`);
+
+      // Validate account if expected email is set
+      const expectedEmail = process.env.YOUTUBE_ACCOUNT_EMAIL;
+      if (expectedEmail && userInfo.email !== expectedEmail) {
+        console.warn(
+          `⚠️  Warning: Authenticated account (${userInfo.email}) does not match expected account (${expectedEmail})`
+        );
+      }
+    } catch (error: any) {
+      throw new Error(
+        '\n❌ Invalid or expired tokens.\n' +
+        '→ Run: npm run auth:setup\n' +
+        '→ To re-authenticate the admin account.\n' +
+        `Details: ${error.message}\n`
+      );
+    }
+  }
+
+  /**
+   * Start background token refresh
+   * Refreshes tokens every 50 minutes (before the 60-minute expiration)
+   */
+  startAutoRefresh(): NodeJS.Timeout {
+    const REFRESH_INTERVAL = 50 * 60 * 1000; // 50 minutes
+
+    const intervalId = setInterval(async () => {
+      try {
+        await this.refreshAccessToken();
+        console.log('✓ Tokens auto-refreshed');
+      } catch (error: any) {
+        console.error('❌ Failed to auto-refresh tokens:', error.message);
+      }
+    }, REFRESH_INTERVAL);
+
+    console.log(`→ Auto-refresh enabled (every 50 minutes)`);
+
+    return intervalId;
   }
 }
 

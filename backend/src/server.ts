@@ -5,6 +5,7 @@ import rateLimit from '@fastify/rate-limit';
 import { config } from 'dotenv';
 import * as v from 'valibot';
 import { AppError, formatErrorResponse } from './utils/error-handler.js';
+import { getYouTubeAuthService } from './services/youtube-auth.service.js';
 
 // Load environment variables
 config();
@@ -110,6 +111,21 @@ fastify.setErrorHandler((error, _request, reply) => {
 // Start server
 const start = async () => {
   try {
+    // Verify backend is authenticated with YouTube before starting server
+    const authService = getYouTubeAuthService();
+
+    try {
+      await authService.ensureAuthenticated();
+      fastify.log.info('✓ YouTube authentication active');
+
+      // Start auto-refresh background job
+      authService.startAutoRefresh();
+    } catch (error: any) {
+      fastify.log.error(error.message);
+      console.error(error.message);
+      process.exit(1);
+    }
+
     await fastify.listen({ port: PORT, host: HOST });
     fastify.log.info(`Server listening on http://${HOST}:${PORT}`);
   } catch (err) {

@@ -1,57 +1,66 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/hooks/useAuth';
+import { useEffect, useState } from 'react';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { AlertCircle } from 'lucide-react';
+import { authApi } from '@/services/api.service';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
+/**
+ * Simplified Protected Route
+ * Only checks if backend is authenticated (not individual users)
+ * Shows error if backend authentication is unavailable
+ */
 export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const router = useRouter();
-  const { isAuthenticated, isLoading, error } = useAuth();
+  const [isChecking, setIsChecking] = useState(true);
+  const [backendError, setBackendError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Redirect to home if not authenticated after loading completes
-    if (!isLoading && !isAuthenticated) {
-      router.push('/?redirect=auth-required');
-    }
-  }, [isAuthenticated, isLoading, router]);
+    // Check if backend is authenticated (one-time check)
+    authApi.status()
+      .then((status) => {
+        if (!status.authenticated) {
+          setBackendError('Backend is not authenticated with YouTube.');
+        }
+      })
+      .catch((error) => {
+        setBackendError(error.message || 'Failed to connect to backend.');
+      })
+      .finally(() => setIsChecking(false));
+  }, []);
 
-  // Show loading spinner while checking auth
-  if (isLoading) {
+  // Show loading while checking backend auth
+  if (isChecking) {
     return (
       <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <LoadingSpinner size="lg" />
-          <p className="text-sm text-muted-foreground">Checking authentication...</p>
+          <p className="text-sm text-muted-foreground">Checking backend...</p>
         </div>
       </div>
     );
   }
 
-  // Show error if auth check failed
-  if (error) {
+  // Show error if backend is not authenticated
+  if (backendError) {
     return (
       <div className="container flex min-h-[calc(100vh-4rem)] items-center justify-center py-8">
         <Alert variant="destructive" className="max-w-md">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Authentication Error</AlertTitle>
+          <AlertTitle>Backend Authentication Error</AlertTitle>
           <AlertDescription>
-            Unable to verify authentication status. Please try refreshing the page.
+            {backendError}
+            <br />
+            <br />
+            Contact the administrator to re-run: <code className="bg-destructive/10 px-1 py-0.5 rounded">npm run auth:setup</code>
           </AlertDescription>
         </Alert>
       </div>
     );
-  }
-
-  // Show nothing while redirecting
-  if (!isAuthenticated) {
-    return null;
   }
 
   // Render protected content

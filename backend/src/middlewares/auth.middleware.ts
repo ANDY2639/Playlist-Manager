@@ -1,83 +1,37 @@
 import { FastifyRequest, FastifyReply } from 'fastify';
 import type { OAuth2Client } from 'google-auth-library';
 import { getYouTubeAuthService } from '../services/youtube-auth.service.js';
-import { StoredTokens } from '../types/auth.types.js';
+import type { StoredTokens } from '../types/auth.types.js';
 
 /**
- * Authentication middleware
- * Verifies user is authenticated and attaches OAuth2 client to request
+ * Simplified authentication middleware
+ * Injects pre-authenticated OAuth2 client from backend singleton
+ * No per-request authentication - assumes backend is already authenticated at startup
  */
 export async function authMiddleware(
   request: FastifyRequest,
   reply: FastifyReply
 ): Promise<void> {
-  const authService = getYouTubeAuthService();
-
   try {
-    // Check if user is authenticated
-    const isAuth = await authService.isAuthenticated();
-
-    if (!isAuth) {
-      return reply.status(401).send({
-        error: 'Unauthorized',
-        message: 'You must be authenticated to access this resource',
-        code: 'NOT_AUTHENTICATED',
-      });
-    }
-
-    // Get authenticated client and attach to request
+    const authService = getYouTubeAuthService();
     const oauth2Client = await authService.getAuthenticatedClient();
-    const tokens = await authService.getStoredTokens();
 
-    // Extend request with auth data
+    // Inject OAuth2 client into request
     (request as any).oauth2Client = oauth2Client;
-    (request as any).tokens = tokens;
-
-    request.log.info('Request authenticated successfully');
   } catch (error: any) {
-    request.log.error('Authentication middleware error:', error);
+    request.log.error('Backend authentication unavailable:', error);
 
-    return reply.status(401).send({
-      error: 'Authentication Failed',
-      message: error.message || 'Failed to authenticate request',
-      code: 'AUTH_FAILED',
+    return reply.status(503).send({
+      error: 'Service Unavailable',
+      message: 'Backend is not authenticated with YouTube. Contact administrator.',
+      code: 'BACKEND_NOT_AUTHENTICATED',
     });
   }
 }
 
 /**
- * Optional authentication middleware
- * Attaches OAuth2 client to request if authenticated, but doesn't block request
- */
-export async function optionalAuthMiddleware(
-  request: FastifyRequest,
-  _reply: FastifyReply
-): Promise<void> {
-  const authService = getYouTubeAuthService();
-
-  try {
-    const isAuth = await authService.isAuthenticated();
-
-    if (isAuth) {
-      const oauth2Client = await authService.getAuthenticatedClient();
-      const tokens = await authService.getStoredTokens();
-
-      (request as any).oauth2Client = oauth2Client;
-      (request as any).tokens = tokens;
-
-      request.log.info('Optional auth: User authenticated');
-    } else {
-      request.log.info('Optional auth: User not authenticated');
-    }
-  } catch (error: any) {
-    request.log.warn('Optional auth middleware error:', error);
-    // Don't block the request, just log the error
-  }
-}
-
-/**
  * Helper to get OAuth2 client from request
- * This should only be used after authMiddleware has validated authentication
+ * This should only be used after authMiddleware has injected the client
  */
 export function getOAuth2ClientFromRequest(
   request: FastifyRequest

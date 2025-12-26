@@ -1,9 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import type {
-  LoginResponse,
-  AuthStatus,
-  LogoutResponse
-} from '@/types/auth.types';
+import type { AuthStatus } from '@/types/auth.types';
 import type {
   PlaylistDTO,
   PlaylistItemDTO,
@@ -87,29 +83,11 @@ apiClient.interceptors.response.use(
 
 export const authApi = {
   /**
-   * Get authorization URL to start OAuth flow
-   * Backend: GET /api/auth/login
-   */
-  login: async (): Promise<LoginResponse> => {
-    const response = await apiClient.get<LoginResponse>('/api/auth/login');
-    return response.data;
-  },
-
-  /**
-   * Check authentication status
+   * Check backend authentication status
    * Backend: GET /api/auth/status
    */
   status: async (): Promise<AuthStatus> => {
     const response = await apiClient.get<AuthStatus>('/api/auth/status');
-    return response.data;
-  },
-
-  /**
-   * Logout and clear tokens
-   * Backend: POST /api/auth/logout
-   */
-  logout: async (): Promise<LogoutResponse> => {
-    const response = await apiClient.post<LogoutResponse>('/api/auth/logout');
     return response.data;
   },
 };
