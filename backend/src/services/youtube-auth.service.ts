@@ -23,6 +23,8 @@ const GOOGLEAPIS_URL = process.env.GOOGLEAPIS_URL!
 const SCOPES = [
   `${GOOGLEAPIS_URL}/auth/youtube.readonly`,
   `${GOOGLEAPIS_URL}/auth/youtube`,
+  `${GOOGLEAPIS_URL}/auth/userinfo.email`,
+  `${GOOGLEAPIS_URL}/auth/userinfo.profile`,
 ];
 
 /**
