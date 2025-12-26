@@ -14,17 +14,31 @@ export async function authMiddleware(
 ): Promise<void> {
   try {
     const authService = getYouTubeAuthService();
+
+    // Check if authenticated first
+    const isAuth = await authService.isAuthenticated();
+
+    if (!isAuth) {
+      request.log.warn('YouTube authentication required but not configured');
+      return reply.status(503).send({
+        error: 'Service Unavailable',
+        message: 'YouTube API is not authenticated. Administrator needs to run: npm run auth:setup',
+        code: 'YOUTUBE_NOT_AUTHENTICATED',
+      });
+    }
+
     const oauth2Client = await authService.getAuthenticatedClient();
 
     // Inject OAuth2 client into request
     (request as any).oauth2Client = oauth2Client;
   } catch (error: any) {
-    request.log.error('Backend authentication unavailable:', error);
+    request.log.error('Backend authentication error:', error);
 
     return reply.status(503).send({
       error: 'Service Unavailable',
-      message: 'Backend is not authenticated with YouTube. Contact administrator.',
-      code: 'BACKEND_NOT_AUTHENTICATED',
+      message: 'YouTube authentication failed. Contact administrator.',
+      code: 'YOUTUBE_AUTH_ERROR',
+      details: error.message,
     });
   }
 }

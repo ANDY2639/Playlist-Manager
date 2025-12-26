@@ -111,19 +111,24 @@ fastify.setErrorHandler((error, _request, reply) => {
 // Start server
 const start = async () => {
   try {
-    // Verify backend is authenticated with YouTube before starting server
+    // Try to authenticate with YouTube (non-blocking)
     const authService = getYouTubeAuthService();
+    const SKIP_AUTH_CHECK = process.env.SKIP_AUTH_CHECK === 'true';
 
-    try {
-      await authService.ensureAuthenticated();
-      fastify.log.info('✓ YouTube authentication active');
+    if (SKIP_AUTH_CHECK) {
+      fastify.log.warn('⚠️  SKIP_AUTH_CHECK=true - YouTube authentication disabled');
+    } else {
+      const authResult = await authService.tryAuthenticate();
 
-      // Start auto-refresh background job
-      authService.startAutoRefresh();
-    } catch (error: any) {
-      fastify.log.error(error.message);
-      console.error(error.message);
-      process.exit(1);
+      if (authResult.authenticated) {
+        fastify.log.info(`✓ YouTube authenticated as: ${authResult.email}`);
+        // Start auto-refresh background job
+        authService.startAutoRefresh();
+      } else {
+        fastify.log.warn('⚠️  YouTube not authenticated - API routes will require authentication');
+        fastify.log.warn(`   ${authResult.error}`);
+        fastify.log.warn('   Run: npm run auth:setup (locally) to authenticate');
+      }
     }
 
     await fastify.listen({ port: PORT, host: HOST });

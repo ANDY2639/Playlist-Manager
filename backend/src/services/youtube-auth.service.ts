@@ -306,6 +306,50 @@ export class YouTubeAuthService {
   }
 
   /**
+   * Try to authenticate - does not throw on failure
+   * Returns true if authenticated, false otherwise
+   * Used at server startup to allow server to start without auth
+   */
+  async tryAuthenticate(): Promise<{
+    authenticated: boolean;
+    email?: string;
+    error?: string;
+  }> {
+    try {
+      const tokens = await this.loadTokens();
+
+      if (!tokens) {
+        return {
+          authenticated: false,
+          error: 'No YouTube tokens found. Run: npm run auth:setup',
+        };
+      }
+
+      // Verify tokens are valid
+      await this.getAuthenticatedClient();
+      const userInfo = await this.getUserInfo();
+
+      // Validate account if expected email is set
+      const expectedEmail = process.env.YOUTUBE_ACCOUNT_EMAIL;
+      if (expectedEmail && userInfo.email !== expectedEmail) {
+        console.warn(
+          `⚠️  Warning: Authenticated account (${userInfo.email}) does not match expected account (${expectedEmail})`
+        );
+      }
+
+      return {
+        authenticated: true,
+        email: userInfo.email,
+      };
+    } catch (error: any) {
+      return {
+        authenticated: false,
+        error: error.message,
+      };
+    }
+  }
+
+  /**
    * Start background token refresh
    * Refreshes tokens every 50 minutes (before the 60-minute expiration)
    */
