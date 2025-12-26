@@ -7,7 +7,6 @@ import { EmptyState } from '@/components/ui/empty-state';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
-import { Card, CardContent } from '@/components/ui/card';
 import { PlaylistCard } from '@/components/playlists/playlist-card';
 import { CreatePlaylistModal } from '@/components/playlists/create-playlist-modal';
 import { EditPlaylistModal } from '@/components/playlists/edit-playlist-modal';
@@ -73,7 +72,7 @@ function PlaylistsContent() {
         </div>
 
         {/* Empty State */}
-        {playlists.length === 0 ? (
+        { playlists.length === 0 ? (
           <div className="animate-fade-in-up stagger-1">
             <EmptyState
               icon={ListVideo}

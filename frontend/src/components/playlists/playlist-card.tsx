@@ -43,9 +43,9 @@ export function PlaylistCard({ playlist, onEdit, onDelete, onDownload }: Playlis
   const PrivacyIcon = privacyInfo.icon;
 
   return (
-    <Card className="group relative overflow-hidden border-border/60 bg-card transition-smooth hover:shadow-lifted hover:border-primary/20">
+    <Card>
       {/* Subtle red accent line on hover */}
-      <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-primary via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-smooth" />
+      <div className="absolute top-0 left-0 w-full h-0.5 bg-linear-to-r from-primary via-primary/50 to-transparent opacity-0 group-hover:opacity-100 transition-smooth" />
 
       {/* Main content */}
       <div className="p-6">
@@ -127,7 +127,7 @@ export function PlaylistCard({ playlist, onEdit, onDelete, onDownload }: Playlis
       </div>
 
       {/* Hover effect background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-primary/0 via-primary/0 to-primary/5 opacity-0 group-hover:opacity-100 transition-smooth pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-br from-primary/0 via-primary/0 to-primary/5 opacity-0 group-hover:opacity-100 transition-smooth pointer-events-none" />
     </Card>
   );
 }

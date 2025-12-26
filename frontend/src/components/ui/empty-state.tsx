@@ -19,13 +19,13 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border/60 p-16 text-center bg-gradient-to-br from-muted/30 to-muted/10',
+        'flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-border/60 p-16 text-center bg-muted/20',
         className
       )}
     >
       <div className="relative">
         <div className="absolute inset-0 bg-primary/10 blur-2xl rounded-full" />
-        <div className="relative mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border-2 border-primary/20">
+        <div className="relative mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-linear-to-br from-primary/10 to-primary/5 border-2 border-primary/20">
           <Icon className="h-10 w-10 text-primary" />
         </div>
       </div>
