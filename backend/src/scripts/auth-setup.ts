@@ -128,7 +128,7 @@ async function checkExistingAuthentication(): Promise<{
       return { valid: false, error: 'Token validation failed' };
     }
 
-    const userInfo = await userInfoResponse.json();
+    const userInfo = (await userInfoResponse.json()) as { email: string; name?: string };
     return { valid: true, email: userInfo.email };
 
   } catch (error: any) {
